@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GREENRIDE - Sustainable Community Mobility Platform | Varanasi</title>
+    <meta name="description" content="Community mobility network connecting passengers, EV drivers, and spare vehicle owners for cleaner, smarter shared journeys.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+    
+    <!-- Google Fonts for High Readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Local Leaflet Styles (Offline Ready) -->
+    <link rel="stylesheet" href="/static/css/leaflet.css">
+    <!-- Custom GreenRide Design System -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Accessibility Skip Link -->
+    <a href="#app-main" class="skip-link">Skip to main content</a>
+
+    <!-- Top Technofest Exhibition Demo Bar -->
+    <div class="technofest-demo-bar" role="region" aria-label="Technofest Presentation Controls">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="demo-badge">🎓 TECHNOFEST 2026</span>
+            <span style="font-weight: 600;">1-Click Role Switcher:</span>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button type="button" class="demo-role-btn active" data-role="passenger" onclick="window.app.switchDemoRole('passenger')">
+                    👤 Ananya (Passenger)
+                </button>
+                <button type="button" class="demo-role-btn" data-role="driver" onclick="window.app.switchDemoRole('driver')">
+                    🚗 Rahul (Driver)
+                </button>
+                <button type="button" class="demo-role-btn" data-role="owner" onclick="window.app.switchDemoRole('owner')">
+                    🔑 Vikram (Vehicle Owner)
+                </button>
+                <button type="button" class="demo-role-btn" data-role="admin" onclick="window.app.switchDemoRole('admin')">
+                    🛡️ Pooja (Admin)
+                </button>
+            </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" onclick="window.demoTour.startTour()" class="btn btn-primary" style="padding: 5px 14px; font-size: 0.8rem; background: #10B981; border: none; font-weight: 700; border-radius: 9999px;">
+                ✨ Guided 5-Min Tour for Judges
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="main-navbar" role="banner">
+        <div class="nav-container">
+            <a href="#home" class="brand-logo" aria-label="GREENRIDE Home">
+                <span style="font-size: 1.8rem;">🌿</span>
+                <span>GREENRIDE</span>
+                <span class="brand-badge">VARANASI</span>
+            </a>
+
+            <nav role="navigation" aria-label="Main menu">
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#find-ride" class="nav-link">Find a Ride</a></li>
+                    <li><a href="#marketplace" class="nav-link">Marketplace</a></li>
+                    <li><a href="#impact" class="nav-link">Sustainability Impact</a></li>
+                    <li><a href="#driver-dash" class="nav-link">Driver Hub</a></li>
+                    <li><a href="#owner-dash" class="nav-link">Owner Hub</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <!-- Accessibility Controls -->
+                <div class="a11y-toolbar" role="group" aria-label="Accessibility options">
+                    <button type="button" id="simple-mode-btn" class="a11y-btn" onclick="window.app.toggleSimpleMode()" title="Toggle Simple Mode for elderly or non-tech users">
+                        👓 Simple Mode
+                    </button>
+                    <button type="button" class="a11y-btn font-scale-btn" data-scale="sm" onclick="window.app.changeTextScale('sm')" title="Standard Text">A</button>
+                    <button type="button" class="a11y-btn font-scale-btn" data-scale="lg" onclick="window.app.changeTextScale('lg')" title="Large Text">A+</button>
+                    <button type="button" class="a11y-btn" onclick="window.app.toggleHighContrast()" title="Toggle High Contrast">◐</button>
+                </div>
+
+                <!-- Active User Pill -->
+                <div style="display: flex; align-items: center; gap: 8px; border-left: 1px solid #E2E8F0; padding-left: 12px;">
+                    <img id="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+                    <div style="display: flex; flex-direction: column;">
+                        <span id="nav-user-name" style="font-size: 0.85rem; font-weight: 700; color: #0F172A; line-height: 1.2;">Ananya Sharma</span>
+                        <span id="nav-user-role" style="font-size: 0.7rem; color: #059669; font-weight: 700;">PASSENGER</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Application Container -->
+    <main id="app-main" role="main" tabindex="-1">
+        <!-- Dynamic Views will be injected here by app.js router -->
+    </main>
+
+    <!-- Mobile Bottom Navigation (Visible on Small Screens) -->
+    <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile navigation">
+        <a href="#home" class="nav-link" style="text-align: center; font-size: 0.75rem;">
+            <div>🏠</div>
+            <span>Home</span>
+        </a>
+        <a href="#find-ride" class="nav-link" style="text-align: center; font-size: 0.75rem;">
+            <div>🔍</div>
+            <span>Rides</span>
+        </a>
+        <a href="#marketplace" class="nav-link" style="text-align: center; font-size: 0.75rem;">
+            <div>🤝</div>
+            <span>Market</span>
+        </a>
+        <a href="#impact" class="nav-link" style="text-align: center; font-size: 0.75rem;">
+            <div>🌱</div>
+            <span>Impact</span>
+        </a>
+        <a href="#admin" class="nav-link" style="text-align: center; font-size: 0.75rem;">
+            <div>🛡️</div>
+            <span>Admin</span>
+        </a>
+    </nav>
+
+    <!-- Footer -->
+    <footer style="background: #0F172A; color: #94A3B8; padding: 48px 0 24px; border-top: 1px solid #1E293B; margin-top: auto;" role="contentinfo">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 32px; margin-bottom: 32px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; color: #FFFFFF; font-size: 1.3rem; font-weight: 800; margin-bottom: 12px;">
+                        <span>🌿</span> GREENRIDE
+                    </div>
+                    <p style="font-size: 0.85rem; line-height: 1.6; color: #94A3B8; margin-bottom: 12px;">
+                        Move together. Earn together. Grow sustainably.<br>
+                        Transforming urban duplicate trips into shared community EV journeys.
+                    </p>
+                    <span class="match-badge" style="background: rgba(16, 185, 129, 0.2); color: #34D399; font-size: 0.75rem;">
+                        Technofest Innovation Project
+                    </span>
+                </div>
+
+                <div>
+                    <h4 style="color: #FFFFFF; font-size: 0.95rem; font-weight: 700; margin-bottom: 12px;">Three Pillars of Impact</h4>
+                    <ul style="list-style: none; font-size: 0.85rem; line-height: 2;">
+                        <li>🌱 <strong>Planet:</strong> Shared EV carpools, avoided emissions</li>
+                        <li>👥 <strong>People:</strong> Dignified driver employment, safe travel</li>
+                        <li>💰 <strong>Prosperity:</strong> Spare vehicle asset monetization</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: #FFFFFF; font-size: 0.95rem; font-weight: 700; margin-bottom: 12px;">Active Varanasi Corridors</h4>
+                    <ul style="list-style: none; font-size: 0.85rem; line-height: 2;">
+                        <li>📍 Lanka Chauraha ➔ BHU Vishwanath Temple</li>
+                        <li>📍 Assi Ghat ➔ Godowlia / Kashi Corridor</li>
+                        <li>📍 Sigra Tech Hub ➔ Cantt Railway Station</li>
+                        <li>📍 Sarnath Heritage ➔ DLW Tech Campus</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: #FFFFFF; font-size: 0.95rem; font-weight: 700; margin-bottom: 12px;">Technofest Prototype Notes</h4>
+                    <p style="font-size: 0.8rem; line-height: 1.6; color: #94A3B8;">
+                        This platform contains realistic Varanasi routing simulation data. Offline resilient architecture ready for live jury demonstration.
+                    </p>
+                    <div style="margin-top: 10px;">
+                        <button onclick="window.demoTour.startTour()" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem; background: #1E293B; color: #fff; border-color: #334155;">
+                            ✨ Start Guided Tour
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid #1E293B; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.8rem;">
+                <div>© 2026 GREENRIDE Community Mobility Platform. All rights reserved.</div>
+                <div style="display: flex; gap: 16px;">
+                    <a href="#find-ride" style="color: #94A3B8; text-decoration: none;">Find Ride</a>
+                    <a href="#marketplace" style="color: #94A3B8; text-decoration: none;">Marketplace</a>
+                    <a href="#impact" style="color: #94A3B8; text-decoration: none;">Impact</a>
+                    <a href="#admin" style="color: #94A3B8; text-decoration: none;">Admin</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Local Offline Libraries -->
+    <script src="/static/js/leaflet.js"></script>
+    <script src="/static/js/chart.min.js"></script>
+
+    <!-- GreenRide Application Scripts -->
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/map.js"></script>
+    <script src="/static/js/demoTour.js"></script>
+    <script src="/static/js/components.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
+
